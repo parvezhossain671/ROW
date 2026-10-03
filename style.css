@@ -1,0 +1,102 @@
+/* --- Chart & Legend Responsive Fix --- */
+.chart {
+  min-height: 360px; /* উচ্চতা বাড়িয়ে নাম দেখানোর জায়গা তৈরি করা হয়েছে */
+  height: auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart h2 {
+  margin-bottom: 8px;
+}
+
+.legend {
+  position: static; /* Absolute সরিয়ে পজিশন ফ্লেক্স করা হয়েছে যাতে ওভারল্যাপ না হয় */
+  display: flex;
+  gap: 14px;
+  font-size: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.sq {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  border-radius: 2px;
+  margin-right: 4px;
+}
+.bluebg { background: #1685e8; }
+.greenbg { background: #19a55f; }
+
+.bars {
+  height: 220px;
+  margin: 30px 10px 45px 35px; /* নিচের মার্জিন বাড়িয়ে নাম সুন্দরভাবে দেখানোর জায়গা করা হয়েছে */
+  border-bottom: 1px solid #9cc7e8;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  gap: 6px;
+  background: repeating-linear-gradient(to top, transparent 0 39px, #dbeaf6 40px);
+}
+
+.barGroup {
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  position: relative;
+  padding-bottom: 0;
+}
+
+.barGroup > div {
+  width: 22px; /* বার কিছুটা চিকন করা হয়েছে যেন মোবাইলে এটে যায় */
+  border-radius: 4px 4px 0 0;
+  position: relative;
+}
+
+.barGroup .target { background: #1685e8; }
+.barGroup .done { background: #19a55f; }
+
+.barGroup span {
+  position: absolute;
+  top: -21px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+/* এলাকার নাম বাঁকা করে সুন্দরভাবে উপস্থাপনের জন্য */
+.barGroup label {
+  position: absolute;
+  bottom: -35px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-25deg);
+  white-space: nowrap;
+  font-size: 11px;
+  font-weight: 700;
+  color: #063e80;
+}
+
+/* --- Mobile Specific Fixes --- */
+@media(max-width:800px){
+  .chart {
+    min-height: 380px;
+    padding-bottom: 15px;
+  }
+  .bars {
+    margin-left: 15px;
+    margin-right: 5px;
+    margin-bottom: 50px;
+  }
+  .barGroup > div {
+    width: 16px; /* মোবাইলে বারের প্রস্থ আরও কম করা হয়েছে */
+  }
+  .barGroup label {
+    font-size: 10px;
+    bottom: -40px;
+    transform: translateX(-60%) rotate(-35deg); /* মোবাইলে নাম বেশি বাঁকা করে পরিষ্কার দেখানো */
+  }
+}
