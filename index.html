@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>বরিশাল পল্লী বিদ্যুৎ সমিতি-১ | ROW Management</title>
+  <link rel="stylesheet" href="style.css?v=5.0">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <button id="menuToggle" class="mobile-menu-btn" aria-label="Toggle Navigation">☰</button>
+      <img src="row_logo.png" alt="Logo">
+      <div>
+        <h1>বরিশাল পল্লী বিদ্যুৎ সমিতি-১</h1>
+        <p>Daily Right of Way (ROW) Work Management</p>
+      </div>
+    </div>
+    <div class="topright">
+      <span>▣ &nbsp; তারিখ : <b id="headDate"></b></span>
+      <i></i>
+      <span>♙ &nbsp; Admin⌄</span>
+    </div>
+  </header>
+
+  <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+  <div class="shell">
+    <aside id="mainSidebar">
+      <nav>
+        <button class="active" data-page="dash">⌂ <span>ড্যাশবোর্ড</span></button>
+        <button data-page="office">▣ <span>কাজের অগ্রগতি</span></button>
+        <button data-page="dailyrow">▧ <span>দৈনিক ROW কাজ</span></button>
+        <button data-page="reports">▣ <span>রিপোর্ট / এক্সপোর্ট</span></button>
+        <button data-page="admin">⚙ <span>Admin Panel</span></button>
+        <button data-page="profile">● <span>প্রোফাইল</span></button>
+        <div class="line"></div>
+        <button data-page="logout">◯ <span>লগআউট</span></button>
+      </nav>
+    </aside>
+
+    <main>
+      <!-- Dashboard Page -->
+      <section id="dash" class="page active">
+        <div class="cards">
+          <div class="stat blue">
+            <div class="ico">▦</div>
+            <small>মোট অভিযোগ কেন্দ্র</small>
+            <strong id="kOff">0</strong><em>টি</em>
+          </div>
+          <div class="stat green">
+            <div class="ico">♧</div>
+            <small>মোট Target KM</small>
+            <strong id="kTarget">0</strong><em> KM</em>
+          </div>
+          <div class="stat orange">
+            <div class="ico">♜</div>
+            <small>কার্যসম্পাদিত KM</small>
+            <strong id="kDone">0</strong><em> KM</em>
+            <div class="miniBar"><b id="doneBar"></b></div>
+            <label id="donePct">0% সম্পন্ন</label>
+          </div>
+          <div class="stat red">
+            <div class="ico">◷</div>
+            <small>অবশিষ্ট KM</small>
+            <strong id="kRemain">0</strong><em> KM</em>
+            <div class="miniBar"><b id="remainBar"></b></div>
+            <label id="remainPct">0% অবশিষ্ট</label>
+          </div>
+          <div class="stat purple" style="background: #f0f4ff; border-left: 4px solid #6c5ce7;">
+            <div class="ico">👥</div>
+            <small>মোট লেবার সংখ্যা</small>
+            <strong id="kLabour">0</strong><em> জন</em>
+          </div>
+          <button class="excel" id="excel">▣ Excel Export</button>
+        </div>
+
+        <div class="gridtop">
+          <div class="panel chart">
+            <h2>এলাকাভিত্তিক টার্গেট বনাম সম্পন্নের পরিমাণ <small>(Target vs Completed)</small></h2>
+            <div class="legend">
+              <span><i class="sq bluebg"></i>Target KM</span>
+              <span><i class="sq greenbg"></i>Completed KM</span>
+            </div>
+            <div class="bars" id="bars"></div>
+          </div>
+          <div class="panel donutPanel">
+            <h2>ROW সম্পন্নের হার</h2>
+            <div class="donut">
+              <div>
+                <strong id="donutPct">0%</strong>
+                <span>সম্পন্ন</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="gridmid">
+          <div class="panel areaTable">
+            <h2>অভিযোগ কেন্দ্র অনুযায়ী অগ্রগতি</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>ক্রমিক</th>
+                  <th>অভিযোগ কেন্দ্রের নাম</th>
+                  <th>মোট টার্গেট পরিমাণ<br>(Target KM)</th>
+                  <th>কার্যসম্পন্ন টার্গেটের পরিমাণ<br>(Completed KM)</th>
+                  <th>অবশিষ্ট টার্গেটের পরিমাণ<br>(Remaining KM)</th>
+                  <th>ROW সম্পন্নের হার</th>
+                  <th>অবস্থা</th>
+                </tr>
+              </thead>
+              <tbody id="areaBody"></tbody>
+            </table>
+          </div>
+          <div class="panel recent">
+            <h2>সাম্প্রতিক কার্যক্রমসমূহ</h2>
+            <div id="recentList"></div>
+          </div>
+        </div>
+
+        <div class="gridbottom">
+          <div class="panel">
+            <div class="sect">
+              <h2>দৈনিক ROW কাজের বিবরণ <small>(Daily ROW)</small></h2>
+              <button class="greenBtn" data-page="dailyrow">সম্পূর্ণ তালিকা দেখুন</button>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>ক্রমিক</th>
+                  <th>তারিখ</th>
+                  <th>অভিযোগ কেন্দ্রের নাম</th>
+                  <th>কাজের ধরণ</th>
+                  <th>ROW কাজ (KM)</th>
+                  <th>শ্রমিক সংখ্যা</th>
+                  <th>মন্তব্য</th>
+                </tr>
+              </thead>
+              <tbody id="rowMini"></tbody>
+            </table>
+          </div>
+          <div class="panel">
+            <div class="sect">
+              <h2>দৈনিক শ্রমিকের কাজ <small>(Daily Labour)</small></h2>
+              <button class="greenBtn" data-page="dailyrow">সম্পূর্ণ তালিকা দেখুন</button>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>ক্রমিক</th>
+                  <th>তারিখ</th>
+                  <th>অভিযোগ কেন্দ্রের নাম</th>
+                  <th>কাজের ধরণ</th>
+                  <th>শ্রমিক সংখ্যা</th>
+                  <th>কাজের পরিমাণ</th>
+                  <th>মন্তব্য</th>
+                </tr>
+              </thead>
+              <tbody id="labMini"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Daily ROW Page -->
+      <section id="dailyrow" class="page">
+        <div class="pageTitle">
+          <h2>দৈনিক ROW কাজ</h2>
+          <p>আজকের ROW কাজ সংরক্ষণ ও সম্পাদনা</p>
+        </div>
+        <div class="panel formPanel">
+          <div class="formgrid">
+            <label>তারিখ<input id="dDate" type="date"></label>
+            <label>অভিযোগ কেন্দ্র<select id="dOffice"></select></label>
+            <label>ROW কাজ (KM)<input id="dRow" type="number" min="0" step=".01"></label>
+            <label>শ্রমিক সংখ্যা<input id="dLab" type="number" min="0" step="1"></label>
+            <button id="saveRow">Save / Update</button>
+          </div>
+          <div id="rowMsg"></div>
+        </div>
+        <div class="panel">
+          <h2>নির্বাচিত দিনের তথ্য</h2>
+          <div class="scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>তারিখ</th>
+                  <th>Area</th>
+                  <th>অফিস</th>
+                  <th>ROW KM</th>
+                  <th>Labour</th>
+                </tr>
+              </thead>
+              <tbody id="rowTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Progress / Office Page -->
+      <section id="office" class="page">
+        <div class="pageTitle">
+          <h2>কাজের অগ্রগতি</h2>
+          <p>২৮টি অভিযোগ কেন্দ্র ও তাদের কাজের অগ্রগতি</p>
+        </div>
+        <div class="panel">
+          <div class="scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>ক্রমিক</th>
+                  <th>Area</th>
+                  <th>অভিযোগ কেন্দ্র</th>
+                  <th>Target KM</th>
+                  <th>Completed KM</th>
+                  <th>Labour</th>
+                  <th>Progress</th>
+                </tr>
+              </thead>
+              <tbody id="officeTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Reports Page -->
+      <section id="reports" class="page">
+        <div class="pageTitle">
+          <h2>রিপোর্ট / এক্সপোর্ট</h2>
+          <p>একই Excel file-এ summary ও daily details</p>
+        </div>
+        <div class="panel reportCard">
+          <h2>Excel Report</h2>
+          <p>Sheet 1: Area/Office Progress Summary · Sheet 2: Daily ROW + Labour</p>
+          <button class="excel big" id="excel2">▣ Excel Export</button>
+        </div>
+      </section>
+
+      <!-- Admin Panel Page -->
+      <section id="admin" class="page">
+        <div class="pageTitle">
+          <h2>Admin Panel</h2>
+          <p>শুধুমাত্র অনুমোদিত Admin-এর জন্য — Target, Office এবং যেকোনো দিনের ROW/Labour সম্পাদনা</p>
+        </div>
+
+        <div id="adminLogin" class="panel adminBox">
+          <h2>Admin Login</h2>
+          <div class="adminForm">
+            <label>Email<input id="adminEmail" type="email" placeholder="Admin email"></label>
+            <label>Password<input id="adminPass" type="password" placeholder="Password"></label>
+            <button id="adminLoginBtn">Login</button>
+          </div>
+          <div id="adminMsg"></div>
+        </div>
+
+        <div id="adminContent" style="display:none">
+          <div class="panel">
+            <div class="sect">
+              <h2>অভিযোগ কেন্দ্র ও Target KM</h2>
+              <button class="greenBtn" id="adminRefresh">Refresh</button>
+            </div>
+            <div class="scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ক্রমিক</th>
+                    <th>Area</th>
+                    <th>অভিযোগ কেন্দ্র</th>
+                    <th>Target KM</th>
+                    <th>Active</th>
+                    <th>Save</th>
+                  </tr>
+                </thead>
+                <tbody id="adminOfficeBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h2>যেকোনো দিনের ROW + Labour Edit</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+              <div>
+                <label><b>তারিখ নির্বাচন করুন: </b></label>
+                <input type="date" id="aDate" style="height: 38px; padding: 0 10px; border-radius: 5px; border: 1px solid #ccc;">
+              </div>
+              <button id="saveAllAdminBtn" class="greenBtn" style="padding: 10px 20px; font-weight: bold;">
+                সকল অফিসের ডাটা একসাথে সেভ করুন
+              </button>
+            </div>
+
+            <div id="adminDailyMsg" style="margin-bottom: 10px; font-weight: bold; color: #159b55;"></div>
+
+            <div class="scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ক্রমিক</th>
+                    <th>Area</th>
+                    <th>অভিযোগ কেন্দ্র</th>
+                    <th>ROW (KM)</th>
+                    <th>শ্রমিক সংখ্যা</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="adminDailyBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h2>Admin Session</h2>
+            <button class="secondaryBtn" id="adminLogout">Logout Admin</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Profile Page -->
+      <section id="profile" class="page">
+        <div class="pageTitle">
+          <h2>প্রোফাইল</h2>
+          <p>বর্তমান ব্যবহারকারী</p>
+        </div>
+        <div class="panel profilebox">
+          <div class="avatar">A</div>
+          <h2>Admin</h2>
+          <p>System Administrator</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
